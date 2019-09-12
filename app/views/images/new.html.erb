@@ -1,0 +1,9 @@
+<%= form_with(model: @imagen, local:true) do |form|  %>
+  <div>
+    <%=form.label :Numero %>
+    <%=form.text_field :numero %>
+  </div>
+  <div>
+    <%= form.submit %>
+  </div>
+<%end%>
