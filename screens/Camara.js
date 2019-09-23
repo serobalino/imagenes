@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     icono:{
         marginBottom: 10,
         marginLeft:10,
+        width:40,
         color: 'white'
     }
 });
