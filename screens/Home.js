@@ -1,4 +1,5 @@
 import React from 'react';
+import { AuthSession } from 'expo';
 import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Button, Block, Text, Input, theme } from 'galio-framework';
 
@@ -8,6 +9,20 @@ const { width } = Dimensions.get('screen');
 import products from '../constants/products';
 
 export default class Home extends React.Component {
+  state = {
+    result:null,
+  };
+
+  _handlePressAsync = async () => {
+    let redirectUrl = AuthSession.getRedirectUrl();
+    let result = await AuthSession.startAsync({
+      authUrl:
+          `https://www.facebook.com/v2.8/dialog/oauth?response_type=token` +
+          `&client_id=${FB_APP_ID}` +
+          `&redirect_uri=${encodeURIComponent(redirectUrl)}`,
+    });
+    this.setState({ result });
+  };
 
   renderProducts = () => {
     return (
