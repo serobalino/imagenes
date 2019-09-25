@@ -20,4 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get("archivo/{id}","ImagesController@generarArchivo")->name("generar");
 
-Route::post("archivo","ImagesController@store");
+Route::resource('/files', 'ImagesController');
+Route::resource('/comments', 'CommentsController');
