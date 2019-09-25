@@ -2,10 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Comment;
+use App\Image as Archivo;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class CommentsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +43,25 @@ class CommentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validacion =   Validator::make($request->all(), [
+            'comentario'    =>  'required',
+            'id'            =>  'required',
+        ]);
+        if($validacion->fails()){
+            $texto  =   '';
+            foreach ($validacion->errors()->all() as $errores)
+                $texto.=$errores.PHP_EOL;
+            return response(['val'=>false,'message'=>$texto,'data'=>$validacion->errors()->all()],500);
+        }else{
+            $hashids    =   new Hashids();
+            $id         =   $hashids->decode($request->id);
+            $archivo    =   Archivo::find(array_shift($id));
+            $comentario =   new Comment();
+            $comentario->id_im      =   $archivo->id_im;
+            $comentario->id_us      =   auth()->user()->getAuthIdentifier();
+            $comentario->texto_co   =   $request->comentario;
+            return response(['val'=>true,'message'=>"Comentario guardado",'data'=>$validacion->errors()->all()]);
+        }
     }
 
     /**
@@ -45,7 +72,12 @@ class CommentsController extends Controller
      */
     public function show($id)
     {
-        //
+        $hashids    =   new Hashids();
+        $id         =   $hashids->decode($id);
+        $archivo    =   Archivo::find(array_shift($id));
+        if($archivo){
+            return response($archivo->comments());
+        }
     }
 
     /**
