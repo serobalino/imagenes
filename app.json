@@ -1,11 +1,14 @@
 {
   "expo": {
-    "name": "imagenes-frontent",
+    "name": "Lion App",
     "description": "React Native - Imágenes",
-    "slug": "rn-material-kit-free",
+    "slug": "material-native",
     "privacy": "unlisted",
     "sdkVersion": "33.0.0",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
