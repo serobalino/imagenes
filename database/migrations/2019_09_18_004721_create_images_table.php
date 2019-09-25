@@ -17,7 +17,7 @@ class CreateImagesTable extends Migration
             $table->bigIncrements('id_im');
             $table->unsignedBigInteger('id_us');
             $table->float('peso_im',8, 2);
-            $table->longText('archivo_im');
+            $table->text('archivo_im');
             $table->string('tipo_im', 100);
             $table->string('nombre_im', 400);
             $table->string('ext_im', 20);
