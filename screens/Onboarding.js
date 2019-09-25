@@ -7,18 +7,26 @@ const { height, width } = Dimensions.get('screen');
 import materialTheme from '../constants/Theme';
 import Images from '../constants/Images';
 import {Icon} from "../components";
+import * as servicios from "../servicios";
 
 export default class Onboarding extends React.Component {
   state={
-    formulario:{
       usuario:null,
       contrasena:null,
-    }
   };
+
+  iniciarSesion(){
+    servicios.login.iniciarSesion(this.state).then(response=>{
+      console.log(response.data);
+    });
+    //this.props.navigation.navigate('Home');
+  }
+
+
   render() {
-    const { navigation } = this.props;
-    const iconUser = <Icon size={16} color={theme.COLORS.MUTED} name="person" family="material" />
-    const iconPass = <Icon size={16} color={theme.COLORS.MUTED} name="security" family="material" />
+
+    const iconUser = <Icon size={16} color={theme.COLORS.MUTED} name="person" family="material" />;
+    const iconPass = <Icon size={16} color={theme.COLORS.MUTED} name="security" family="material" />;
 
     return (
       <Block flex style={styles.container}>
@@ -46,19 +54,24 @@ export default class Onboarding extends React.Component {
                   style={styles.input}
                   iconContent={iconUser}
                   placeholder="Usuario"
+                  onChangeText={(texto) => this.setState({usuario:texto})}
+                  value={this.state.usuario}
               />
               <Input
                   right
                   color="black"
                   style={styles.input}
                   iconContent={iconPass}
+                  password={true}
                   placeholder="Contraseña"
+                  onChangeText={(texto) => this.setState({contrasena:texto})}
+                  value={this.state.contrasena}
               />
               <Button
                 shadowless
                 style={styles.button}
                 color={materialTheme.COLORS.BUTTON_COLOR}
-                onPress={() => navigation.navigate('Home')}>
+                onPress={() => this.iniciarSesion()}>
                 Iniciar
               </Button>
             </Block>
