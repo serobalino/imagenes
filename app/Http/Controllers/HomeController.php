@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Image as Archivo;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -24,5 +27,15 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+    public function show($id)
+    {
+        $hashids    =   new Hashids();
+        $id         =   $hashids->decode($id);
+        $archivo    =   Archivo::find(array_shift($id));
+        if($archivo){
+            return view('imagen',['obj'=>$archivo]);
+        }
+        return abort(404);
     }
 }

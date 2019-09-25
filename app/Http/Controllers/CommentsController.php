@@ -60,6 +60,7 @@ class CommentsController extends Controller
             $comentario->id_im      =   $archivo->id_im;
             $comentario->id_us      =   auth()->user()->getAuthIdentifier();
             $comentario->texto_co   =   $request->comentario;
+            $comentario->save();
             return response(['val'=>true,'message'=>"Comentario guardado",'data'=>$validacion->errors()->all()]);
         }
     }
@@ -76,7 +77,7 @@ class CommentsController extends Controller
         $id         =   $hashids->decode($id);
         $archivo    =   Archivo::find(array_shift($id));
         if($archivo){
-            return response($archivo->comments());
+            return response($archivo->comments);
         }
     }
 

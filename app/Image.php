@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Hashids\Hashids;
+use Jenssegers\Date\Date;
 
 class Image extends Model
 {
@@ -11,7 +12,7 @@ class Image extends Model
 
     protected $hidden       =   ["archivo_im","id_im","id_us"];
 
-    protected $appends      =   ['code_im'];
+    protected $appends      =   ['code_im','hace_im','ruta_im'];
 
     protected $with         =   ['autor'];
 
@@ -22,10 +23,20 @@ class Image extends Model
     }
 
     public function comments(){
-        return $this->hasMany(Comment::class,'id_im','id_im');
+        return $this->hasMany(Comment::class,'id_im','id_im')->latest();
     }
 
     public function autor(){
         return $this->hasOne(User::class,'id','id_us');
     }
+
+    public function getHaceImAttribute(){
+        return Date::createFromFormat('Y-m-d H:i:s',$this->attributes['created_at'])->diffForHumans();
+    }
+
+    public function getRutaImAttribute(){
+        return route("archivos.show",$this->getCodeImAttribute());
+    }
+
+
 }

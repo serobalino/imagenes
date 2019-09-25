@@ -13,10 +13,9 @@
                 <i class="fa fa-stop"></i> <span v-html="mensaje.texto"></span>
             </div>
             <div class="alert alert-success" role="alert" v-if="mensaje.estado===3">
-                <i class="fa fa-thumbs-up"></i> <span v-html="mensaje.texto"></span>
+                <i class="fa fa-thumbs-up"></i> <span v-html="mensaje.texto.message"></span>
             </div>
         </div>
-
         <b-form-file  browse-text="Examinar" v-model="archivo" :disabled="subiendo" placeholder="Elija un archivo"></b-form-file>
         <div class="text-center mt-3">
             <button class="btn btn-info" v-on:click="subir" :disabled="subiendo">Subir</button>
@@ -32,7 +31,7 @@
             subiendo:false,
             mensaje:{
                 estado:1,
-                texto:null,
+                texto:"Suba un archivo máximo de 15 megas",
             },
             archivo: null,
         }),

@@ -22,7 +22,7 @@ class ImagesController extends Controller
      */
     public function index()
     {
-        return response(Archivo::where("id_us","!=",auth()->user()->getAuthIdentifier())->get());
+        return response(Archivo::where("id_us","!=",auth()->user()->getAuthIdentifier())->latest()->get());
     }
 
     /**
@@ -32,7 +32,7 @@ class ImagesController extends Controller
      */
     public function create()
     {
-        return response(Archivo::where("id_us","=",auth()->user()->getAuthIdentifier())->get());
+        return response(Archivo::where("id_us","=",auth()->user()->getAuthIdentifier())->latest()->get());
     }
 
     /**
@@ -62,7 +62,7 @@ class ImagesController extends Controller
             $archivo->save();
             unset($file);
             unset($archivo);
-            return response(['val'=>true,'message'=>"Se pudo",'data'=>$validacion->errors()->all()]);
+            return response(['val'=>true,'message'=>"Se guardó correctamente",'data'=>$validacion->errors()->all()]);
         }
     }
 

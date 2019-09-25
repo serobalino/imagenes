@@ -13,5 +13,8 @@ export default {
                 'Charset': ' utf-8'
             }
         });
+    },
+    index(){
+        return axios.get(PREFIJO);
     }
 };
