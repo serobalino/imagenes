@@ -43,12 +43,7 @@ export default class Pro extends React.Component {
                 Take advantage of all the features and screens made upon Galio Design System, coded on React Native for both.
               </Text>
               <Block row style={{ marginTop: theme.SIZES.BASE * 1.5, marginBottom: theme.SIZES.BASE * 4 }}>
-                <Image
-                  source={require('../assets/images/ios.png')}
-                  style={{ height: 38, width: 82, marginRight: theme.SIZES.BASE * 1.5 }} />
-                <Image
-                  source={require('../assets/images/android.png')}
-                  style={{ height: 38, width: 140 }} />
+
               </Block>
               <Button
                 shadowless
