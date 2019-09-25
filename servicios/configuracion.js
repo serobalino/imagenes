@@ -1,5 +1,6 @@
 import axios from "axios";
-
+import {WSnackBar} from 'react-native-smart-tip';
+import constantes from "../constants/constantes";
 
 //axios.defaults.headers.common['Access-Control-Allow-Origin'] ="*";
 //axios.defaults.headers.common['Accept'] = process.env.VUE_APP_API_KEY;
@@ -8,7 +9,7 @@ import axios from "axios";
 //axios.defaults.headers.common['Content-Type'] = "application/json";
 //axios.defaults.params={data:{dt3:process.env.VUE_APP_API_KEY}};
 
-axios.defaults.baseURL = process.env.REACT_APP_URL_API;
+axios.defaults.baseURL = constantes.backend;
 
 axios.interceptors.request.use((config)=> {
     if(config.data)
@@ -24,11 +25,12 @@ axios.interceptors.response.use(
 );
 
 function respuestaErro(error){
+    //console.disableYellowBox = true;
     if(error.response){
-        if (error.response.data.Message)
-            console.log(error.response.data.Message)
+        if (error.response.data.message)
+            WSnackBar.show({data: error.response.data.message});
     }else{
-        console.log(error.message);
+        WSnackBar.show({data: error.message});
     }
     return Promise.reject(error);
 }
