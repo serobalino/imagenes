@@ -1,20 +1,34 @@
 import axios from 'axios';
+import constantes from "../constants/constantes";
+import { AsyncStorage } from 'react-native';
 
-const PREFIJO = '/api/Mdl/';
+const PREFIJO = '/api';
 
 export default {
-    todos(id){
-        return axios.all([
-            this.individuales(id),
-            this.kit(id)
-        ]);
+    async iniciarSesion(data) {
+        const objeto = {
+            grant_type: "password",
+            client_id: constantes.token.id,
+            client_secret: constantes.token.token,
+            username:data.usuario,
+            password:data.contrasena,
+            scope:""
+        };
+        const aux = await axios.post(`/oauth/token`, objeto);
+
+            this.guardar(aux.data.token_type+" "+aux.data.access_token);
+            return this.recuperarUsuario();
+
+        //console.log(aux.data)
     },
-    individuales(id) {
-        const dto = { ndt1: id, bdt3: true,ndt5:2 }; //modelo comercial// ndt5  1 es kit o 2 no es kit
-        return axios.post(`${PREFIJO}VmSlIdV`, dto);
+    recuperarUsuario(){
+        return axios.get(`${PREFIJO}/user`);
     },
-    kit(id) {
-        const dto = { ndt1: id, bdt3: true,ndt5:1 }; //modelo comercial// ndt5  1 es kit o 2 no es kit
-        return axios.post(`${PREFIJO}VmSlIdV`, dto);
+    async guardar(data){
+        try {
+            await AsyncStorage.setItem('token', data);
+        } catch (error) {
+            console.log(error);
+        }
     }
 };
