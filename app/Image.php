@@ -11,7 +11,9 @@ class Image extends Model
 
     protected $hidden       =   ["archivo_im","id_im","id_us"];
 
-    protected $appends = ['code_im'];
+    protected $appends      =   ['code_im'];
+
+    protected $with         =   ['autor'];
 
 
     public function getCodeImAttribute(){
