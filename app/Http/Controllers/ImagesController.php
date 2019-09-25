@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Image;
+use App\Image as Archivo;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ImagesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +22,7 @@ class ImagesController extends Controller
      */
     public function index()
     {
-        return response(Image::all());
+        return response(Archivo::where("id_us","!=",auth()->user()->getAuthIdentifier())->get());
     }
 
     /**
@@ -26,7 +32,7 @@ class ImagesController extends Controller
      */
     public function create()
     {
-        //
+        return response(Archivo::where("id_us","=",auth()->user()->getAuthIdentifier())->get());
     }
 
     /**
@@ -37,7 +43,7 @@ class ImagesController extends Controller
      */
     public function store(Request $request){
         $validacion =   Validator::make($request->all(), [
-            'archivo'       => 'required|file|max:20480',
+            'archivo'       => 'required|file',
         ]);
         if($validacion->fails()){
             $texto  =   '';
@@ -46,14 +52,16 @@ class ImagesController extends Controller
             return response(['val'=>false,'message'=>$texto,'data'=>$validacion->errors()->all()],500);
         }else{
             $file                   =   $request->file('archivo');
-            $archivo                =   new Image();
+            $archivo                =   new Archivo();
             $archivo->id_us         =   auth()->user()->getAuthIdentifier();
             $archivo->peso_im       =   $file->getSize()/1024;
-            $archivo->archivo_im    =   base64_encode(file_get_contents($file));
+            $archivo->archivo_im    =   Storage::putFile('subidas', $file);
             $archivo->tipo_im       =   $file->getMimeType();
             $archivo->ext_im        =   $file->getClientOriginalExtension();
             $archivo->nombre_im     =   pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $archivo->save();
+            unset($file);
+            unset($archivo);
             return response(['val'=>true,'message'=>"Se pudo",'data'=>$validacion->errors()->all()]);
         }
     }
@@ -68,9 +76,9 @@ class ImagesController extends Controller
     {
         $hashids    =   new Hashids();
         $id         =   $hashids->decode($id);
-        $archivo    =   Image::find(array_shift($id));
+        $archivo    =   Archivo::find(array_shift($id));
         if($archivo){
-            return response(base64_decode($archivo->archivo_im), 200)
+            return response(Storage::get($archivo->archivo_im), 200)
                 ->header('Content-Type', $archivo->tipo_im);
         }
     }
@@ -106,6 +114,6 @@ class ImagesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //Storage::delete('file.jpg');
     }
 }
