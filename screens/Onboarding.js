@@ -9,6 +9,12 @@ import Images from '../constants/Images';
 import {Icon} from "../components";
 
 export default class Onboarding extends React.Component {
+  state={
+    formulario:{
+      usuario:null,
+      contrasena:null,
+    }
+  };
   render() {
     const { navigation } = this.props;
     const iconUser = <Icon size={16} color={theme.COLORS.MUTED} name="person" family="material" />
@@ -27,7 +33,7 @@ export default class Onboarding extends React.Component {
           <Block flex space="around" style={{ zIndex: 2 }}>
             <Block>
               <Block>
-                <Text color="white" size={60}>oAuth2</Text>
+                <Text color="white" size={60}>Lion</Text>
               </Block>
               <Text size={16} color='rgba(255,255,255,0.6)'>
                 Ingresa tus credenciales
