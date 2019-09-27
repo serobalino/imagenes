@@ -74,9 +74,10 @@ class ImagesController extends Controller
      */
     public function show($id)
     {
-        $hashids    =   new Hashids();
-        $id         =   $hashids->decode($id);
-        $archivo    =   Archivo::find(array_shift($id));
+//        $hashids    =   new Hashids();
+//        $id         =   $hashids->decode($id);
+//        $archivo    =   Archivo::find(array_shift($id));
+        $archivo    =   Archivo::find($id);
         if($archivo){
             return response(Storage::get($archivo->archivo_im), 200)
                 ->header('Content-Type', $archivo->tipo_im);
