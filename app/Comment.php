@@ -2,12 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Date\Date;
 
 class Comment extends Model
 {
-    protected $primaryKey   =   "id_co";
+//    protected $primaryKey   =   "id_co";
 
     protected $with         =   ['autor'];
 
@@ -15,11 +15,15 @@ class Comment extends Model
 
     protected $hidden       =   ['id_im','id_us'];
 
+    protected $connection   =   "mongodb";
+
+    protected $dateFormat   =   "Y-m-d\TH:i:s.uP";
+
     public function autor(){
         return $this->hasOne(User::class,'id','id_us');
     }
 
     public function getHaceCoAttribute(){
-        return Date::createFromFormat('Y-m-d H:i:s',$this->attributes['created_at'])->diffForHumans();
+        return 5;//Date::createFromFormat('Y-m-d H:i:s',$this->attributes['created_at'])->diffForHumans();
     }
 }
