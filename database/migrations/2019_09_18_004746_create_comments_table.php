@@ -13,14 +13,14 @@ class CreateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
-            $table->bigIncrements('id_co');
-            $table->unsignedBigInteger('id_im');
+        Schema::connection('mongodb')->create('comments', function (Blueprint $table) {
+            //$table->primary('_id');
+            $table->string('id_im');
             $table->unsignedBigInteger('id_us');
             $table->text('texto_co');
 
             $table->foreign('id_us')->references('id')->on('users');
-            $table->foreign('id_im')->references('id_im')->on('images');
+            $table->foreign('id_im')->references('_id')->on('images');
             $table->timestamps();
         });
     }
@@ -32,7 +32,7 @@ class CreateCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comments',function (Blueprint $table) {
+        Schema::connection('mongodb')->dropIfExists('comments',function (Blueprint $table) {
             $table->dropForeign(['id_us','id_im']);
         });
     }
