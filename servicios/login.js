@@ -15,17 +15,18 @@ export default {
             scope:""
         };
         const aux = await axios.post(`/oauth/token`, objeto);
-
-            this.guardar(aux.data.token_type+" "+aux.data.access_token);
-            return this.recuperarUsuario();
-
+        this.guardar(aux.data.token_type+" "+aux.data.access_token);
+        return this.recuperarUsuario();
         //console.log(aux.data)
     },
-    recuperarUsuario(){
-        return axios.get(`${PREFIJO}/user`);
+    async recuperarUsuario(){
+        const usuario = axios.get(`${PREFIJO}/user`);
+        AsyncStorage.setItem('usuario',usuario.data);
+        return usuario;
     },
     async guardar(data){
         try {
+            axios.defaults.headers.common['Authorization'] = data;
             await AsyncStorage.setItem('token', data);
         } catch (error) {
             console.log(error);
