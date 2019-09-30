@@ -1,6 +1,6 @@
 const aplicacion    =   "Lion";
-const backend       =   "http://mateo32115.ml";
-const token         =   {id:3,token:"VfvMC7atUtEvg23GG1s94Yx6mFFA8EspTw9iLsJC"};
+const backend       =   "https://mateo32115.ml";
+const token         =   {id:1,token:"Vc9pbZsDts8TMjC9dXZblh2HAWhFxXn2bb4tOIav"};
 
 export default {
     aplicacion,
