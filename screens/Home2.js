@@ -10,7 +10,7 @@ import products from '../constants/products';
 export default class Home extends React.Component {
 
   componentDidMount() {
-    console.log("Mis Fotos");
+    console.log("Mundo fotos");
   }
 
   renderProducts = () => {
