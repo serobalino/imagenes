@@ -40,7 +40,7 @@ class Image extends Model
         //$MongoDt = new MongoDate($this->attributes['created_at'], ($this->attributes['created_at'])->format('Y-m-d H:i:s'));
         //return Date::createFromFormat('Y-m-d H:i:s',$MongoDt)->diffForHumans();
         //return Date::createFromTimeStamp($this->attributes['created_at']);
-        return (string)$this->attributes['created_at'];
+        return (int)$this->attributes['created_at'];
     }
 
     public function getRutaImAttribute(){
