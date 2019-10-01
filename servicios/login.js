@@ -15,21 +15,38 @@ export default {
             scope:""
         };
         const aux = await axios.post(`/oauth/token`, objeto);
-        this.guardar(aux.data.token_type+" "+aux.data.access_token);
-        return this.recuperarUsuario();
-        //console.log(aux.data)
+        if(aux){
+            this.guardar(aux.data.token_type+" "+aux.data.access_token);
+            return this.recuperarUsuario();
+        }else{
+            return false;
+        }
     },
     async recuperarUsuario(){
-        const usuario = axios.get(`${PREFIJO}/user`);
-        AsyncStorage.setItem('usuario',usuario.data);
-        return usuario;
+        let valor = false;
+        const value = await AsyncStorage.getItem('token');
+        if (value) {
+            axios.defaults.headers.common['Authorization'] = value;
+            let usuario=null;
+            const aux = await axios.get(`${PREFIJO}/user`);
+            if(aux){
+                await AsyncStorage.setItem('usuario',JSON.stringify(aux.data));
+                usuario=aux.data;
+                valor=true;
+            }else{
+                valor=false;
+            }
+        }else{
+            valor=false;
+        }
+        return valor;
     },
     async guardar(data){
         try {
             axios.defaults.headers.common['Authorization'] = data;
             await AsyncStorage.setItem('token', data);
         } catch (error) {
-            console.log(error);
+            console.log("error en guardar",error);
         }
     }
 };
