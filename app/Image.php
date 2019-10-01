@@ -39,7 +39,7 @@ class Image extends Model
     public function getHaceImAttribute(){
         //$MongoDt = $this->attributes['created_at']->toDateTime()->format('Y-m-d H:i:s');
         //return $this->attributes['created_at']->diffForHumans();
-        return new MongoDB\BSON\UTCDateTime($this->attributes['created_at']);
+        return new \MongoDB\BSON\UTCDateTime($this->attributes['created_at']);
     }
 
     public function getRutaImAttribute(){
