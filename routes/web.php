@@ -17,10 +17,15 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/home/{id}', 'HomeController@show');
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home/{id}', 'HomeController@show');
+
+    Route::resource('/archivos', 'ImagesController');
+    Route::resource('/comentarios', 'CommentsController');
+});
+
 
 Auth::routes();
 
-Route::resource('/archivos', 'ImagesController');
-Route::resource('/comentarios', 'CommentsController');
+
