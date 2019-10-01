@@ -24,6 +24,6 @@ class Comment extends Model
     }
 
     public function getHaceCoAttribute(){
-        return 5;//Date::createFromFormat('Y-m-d H:i:s',$this->attributes['created_at'])->diffForHumans();
+        return $this->attributes['created_at'];
     }
 }
