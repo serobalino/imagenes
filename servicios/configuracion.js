@@ -1,6 +1,6 @@
 import axios from "axios";
 import {WSnackBar} from 'react-native-smart-tip';
-import {AsyncStorage} from 'react-native';
+// import {AsyncStorage} from 'react-native';
 import constantes from "../constants/constantes";
 
 //axios.defaults.headers.common['Access-Control-Allow-Origin'] ="*";
@@ -13,10 +13,10 @@ import constantes from "../constants/constantes";
 axios.defaults.baseURL = constantes.backend;
 
 axios.interceptors.request.use((config)=> {
-    const value = AsyncStorage.getItem('token');
-    if (value !== null) {
-        axios.defaults.headers.common['Authorization'] = value;
-    }
+    // const value = AsyncStorage.getItem('token');
+    // if (value !== null) {
+    //     axios.defaults.headers.common['Authorization'] = value;
+    // }
     return config;
 });
 
