@@ -53,11 +53,12 @@ class CommentsController extends Controller
                 $texto.=$errores.PHP_EOL;
             return response(['val'=>false,'message'=>$texto,'data'=>$validacion->errors()->all()],500);
         }else{
-            $hashids    =   new Hashids();
-            $id         =   $hashids->decode($request->id);
-            $archivo    =   Archivo::find(array_shift($id));
+//            $hashids    =   new Hashids();
+//            $id         =   $hashids->decode($request->id);
+//            $archivo    =   Archivo::find(array_shift($id));
             $comentario =   new Comment();
-            $comentario->id_im      =   $archivo->id_im;
+            //$comentario->id_im      =   $archivo->id_im;
+            $comentario->id_im      =   $request->id;
             $comentario->id_us      =   auth()->user()->getAuthIdentifier();
             $comentario->texto_co   =   $request->comentario;
             $comentario->save();
@@ -73,9 +74,10 @@ class CommentsController extends Controller
      */
     public function show($id)
     {
-        $hashids    =   new Hashids();
-        $id         =   $hashids->decode($id);
-        $archivo    =   Archivo::find(array_shift($id));
+//        $hashids    =   new Hashids();
+//        $id         =   $hashids->decode($id);
+//        $archivo    =   Archivo::find(array_shift($id));
+        $archivo    =   Archivo::find($id);
         if($archivo){
             return response($archivo->comments);
         }

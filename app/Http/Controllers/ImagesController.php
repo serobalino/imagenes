@@ -55,7 +55,7 @@ class ImagesController extends Controller
             $archivo                =   new Archivo();
             $archivo->id_us         =   auth()->user()->getAuthIdentifier();
             $archivo->peso_im       =   $file->getSize()/1024;
-            $archivo->archivo_im    =   Storage::putFile('subidas', $file);
+            $archivo->archivo_im    =   Storage::disk('dropbox')->putFile('subidas', $file);
             $archivo->tipo_im       =   $file->getMimeType();
             $archivo->ext_im        =   $file->getClientOriginalExtension();
             $archivo->nombre_im     =   pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -74,11 +74,12 @@ class ImagesController extends Controller
      */
     public function show($id)
     {
-        $hashids    =   new Hashids();
-        $id         =   $hashids->decode($id);
-        $archivo    =   Archivo::find(array_shift($id));
+//        $hashids    =   new Hashids();
+//        $id         =   $hashids->decode($id);
+//        $archivo    =   Archivo::find(array_shift($id));
+        $archivo    =   Archivo::find($id);
         if($archivo){
-            return response(Storage::get($archivo->archivo_im), 200)
+            return response(Storage::disk('dropbox')->get($archivo->archivo_im), 200)
                 ->header('Content-Type', $archivo->tipo_im);
         }
     }

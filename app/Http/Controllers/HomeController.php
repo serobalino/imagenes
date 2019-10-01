@@ -30,9 +30,9 @@ class HomeController extends Controller
     }
     public function show($id)
     {
-        $hashids    =   new Hashids();
-        $id         =   $hashids->decode($id);
-        $archivo    =   Archivo::find(array_shift($id));
+//        $hashids    =   new Hashids();
+//        $id         =   $hashids->decode($id);
+        $archivo    =   Archivo::find($id);
         if($archivo){
             return view('imagen',['obj'=>$archivo]);
         }

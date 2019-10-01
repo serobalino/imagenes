@@ -90,6 +90,17 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
         ],
+        'mongodb' => [
+            'driver'   => 'mongodb',
+            'host'     => env('DB_HOST2', 'localhost'),
+            'port'     => env('DB_PORT2', 27017),
+            'database' => env('DB_DATABASE2'),
+            'username' => env('DB_USERNAME2'),
+            'password' => env('DB_PASSWORD2'),
+            'options'  => [
+                'database' => 'admin' // sets the authentication database required by mongo 3
+            ]
+        ],
 
     ],
 

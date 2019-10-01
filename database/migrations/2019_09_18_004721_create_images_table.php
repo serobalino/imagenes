@@ -13,8 +13,8 @@ class CreateImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table) {
-            $table->bigIncrements('id_im');
+        Schema::connection('mongodb')->create('images', function (Blueprint $table) {
+            //$table->primary('_id');
             $table->unsignedBigInteger('id_us');
             $table->float('peso_im',8, 2);
             $table->text('archivo_im');
@@ -34,7 +34,7 @@ class CreateImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('images',function (Blueprint $table) {
+        Schema::connection('mongodb')->dropIfExists('images',function (Blueprint $table) {
             $table->dropForeign(['id_us']);
         });
     }

@@ -2,28 +2,34 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Hashids\Hashids;
 use Jenssegers\Date\Date;
+use Jenssegers\Mongodb\Eloquent\Model;
+use MongoDate;
 
 class Image extends Model
 {
-    protected $primaryKey   =   "id_im";
+    //protected $primaryKey   =   "id_im";
 
     protected $hidden       =   ["archivo_im","id_im","id_us"];
 
-    protected $appends      =   ['code_im','hace_im','ruta_im'];
+    protected $appends      =   ['hace_im','ruta_im','code_im'];
 
     protected $with         =   ['autor'];
 
+    protected $connection   =   "mongodb";
+
+    protected $dateFormat   =   "Y-m-d\TH:i:s.uP";
+
 
     public function getCodeImAttribute(){
-        $hashids = new Hashids();
-        return $hashids->encode($this->attributes['id_im']);
+//        $hashids = new Hashids();
+//        return $hashids->encode($this->attributes['id_im']);
+        return $this->attributes['_id'];
     }
 
     public function comments(){
-        return $this->hasMany(Comment::class,'id_im','id_im')->latest();
+        return $this->hasMany(Comment::class,'id_im','_id')->latest();
     }
 
     public function autor(){
@@ -31,7 +37,8 @@ class Image extends Model
     }
 
     public function getHaceImAttribute(){
-        return Date::createFromFormat('Y-m-d H:i:s',$this->attributes['created_at'])->diffForHumans();
+        //$MongoDt = new MongoDate($this->attributes['created_at'], ($this->attributes['created_at'])->format('Y-m-d H:i:s'));
+        return 5;//Date::createFromFormat('Y-m-d H:i:s',$MongoDt)->diffForHumans();
     }
 
     public function getRutaImAttribute(){
