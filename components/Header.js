@@ -93,13 +93,13 @@ class Header extends React.Component {
 
     return (
       <Block row style={styles.tabs}>
-        <Button shadowless style={[styles.tab, styles.divider]} onPress={() => navigation.navigate('Pro')}>
+        <Button shadowless style={[styles.tab, styles.divider]} onPress={() => navigation.navigate('Home')}>
           <Block row middle>
             <Icon name="person" family="MaterialIcons" style={{ paddingRight: 8 }} />
             <Text size={16} style={styles.tabTitle}>{tabTitleLeft || 'Sin texto'}</Text>
           </Block>
         </Button>
-        <Button shadowless style={styles.tab} onPress={() => navigation.navigate('Pro')}>
+        <Button shadowless style={styles.tab} onPress={() => navigation.navigate('Home2')}>
           <Block row middle>
             <Icon size={16} name="network" family="Entypo" style={{ paddingRight: 8 }} />
             <Text size={16} style={styles.tabTitle}>{tabTitleRight || 'Sin texto'}</Text>
