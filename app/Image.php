@@ -37,8 +37,9 @@ class Image extends Model
     }
 
     public function getHaceImAttribute(){
-        $MongoDt = new MongoDate($this->attributes['created_at'], ($this->attributes['created_at'])->format('Y-m-d H:i:s'));
-        return Date::createFromFormat('Y-m-d H:i:s',$MongoDt)->diffForHumans();
+        //$MongoDt = new MongoDate($this->attributes['created_at'], ($this->attributes['created_at'])->format('Y-m-d H:i:s'));
+        //return Date::createFromFormat('Y-m-d H:i:s',$MongoDt)->diffForHumans();
+        return Date::parse($this->attributes['created_at'])->diffForHumans();
     }
 
     public function getRutaImAttribute(){
