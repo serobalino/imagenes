@@ -6,6 +6,7 @@ import { Block, Text, theme } from "galio-framework";
 
 import ComponentsScreen from '../screens/Components';
 import HomeScreen from '../screens/Home';
+import HomeScreen2 from '../screens/Home2';
 import OnboardingScreen from '../screens/Onboarding';
 import ProfileScreen from '../screens/Profile';
 import ProScreen from '../screens/Pro';
@@ -92,16 +93,9 @@ const HomeStack = createStackNavigator({
   Home: {
     screen: HomeScreen,
     navigationOptions: ({navigation}) => ({
-      header: <Header tabs title="Home" tabTitleLeft="Mis fotos" tabTitleRight="Mundo fotos" navigation={navigation} />,
+      header: <Header tabs title="Mis Fotos" tabTitleLeft="Mis fotos" tabTitleRight="Mundo fotos" navigation={navigation} />,
     })
-  },
-  Pro: {
-    screen: ProScreen,
-    navigationOptions: ({navigation}) => ({
-      header: <Header back white transparent title="" navigation={navigation} />,
-      headerTransparent: true,
-    })
-  },
+  }
 },
 {
   cardStyle: {
@@ -110,19 +104,40 @@ const HomeStack = createStackNavigator({
   transitionConfig,
 });
 
+const HomeStack2 = createStackNavigator({
+      Home2: {
+        screen: HomeScreen2,
+        navigationOptions: ({navigation}) => ({
+          header: <Header tabs title="Mundo fotos" tabTitleLeft="Mis fotos" tabTitleRight="Mundo fotos" navigation={navigation} />,
+        })
+      },
+    },
+    {
+      cardStyle: {
+        backgroundColor: '#EEEEEE', //this is the backgroundColor for the app
+      },
+      transitionConfig,
+    });
+
+
 const AppStack = createDrawerNavigator(
   {
     Onboarding: {
       screen: OnboardingScreen,
-      navigationOptions: {
-        drawerLabel: () => {},
-      },
     },
     Home: {
       screen: HomeStack,
       navigationOptions: {
         drawerLabel: ({focused}) => (
           <Drawer focused={focused} screen="Home" title="Man" />
+        )
+      }
+    },
+    Home2: {
+      screen: HomeStack2,
+      navigationOptions: {
+        drawerLabel: ({focused}) => (
+            <Drawer focused={focused} screen="Home2" title="Man" />
         )
       }
     },

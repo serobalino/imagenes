@@ -1,6 +1,6 @@
 import React from "react";
 import { DrawerItems } from 'react-navigation';
-import { TouchableWithoutFeedback, ScrollView, StyleSheet, Dimensions, Image } from "react-native";
+import {TouchableWithoutFeedback, ScrollView, StyleSheet, Dimensions, Image, AsyncStorage} from "react-native";
 import { Block, Text, theme } from "galio-framework";
 
 import { Icon } from '../components/';
@@ -25,16 +25,23 @@ const Drawer = (props) => (
   </Block>
 );
 
-const profile = {
-  avatar: Images.Profile,
-  name: 'Rachel Brown',
-  type: 'Seller',
-  plan: 'Pro',
-  rating: 4.8
+let Storage = {
+  getUsuario: async function () {
+    let item = await AsyncStorage.getItem("usuario");
+    item = JSON.parse(item);
+    //return item.name;
+    return {
+      avatar:Images.Profile,
+      name:item.name,
+      type: 'Seller',
+      plan: 'Pro',
+      rating: 4.8
+    }
+  }
 };
 
 const Menu = {
-  contentComponent: props => <Drawer {...props} profile={profile} />,
+  contentComponent: props => <Drawer {...props} profile={Storage.getUsuario()} />,
   drawerBackgroundColor: 'white',
   drawerWidth: width * 0.8,
   contentOptions: {
