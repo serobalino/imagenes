@@ -28,10 +28,11 @@
     export default {
         name: "formulario",
         data:()=>({
+            max: 10,
             subiendo:false,
             mensaje:{
                 estado:1,
-                texto:"Suba un archivo máximo de 15 megas",
+                texto:"Suba un archivo máximo de 10 megas",
             },
             archivo: null,
         }),
@@ -39,16 +40,22 @@
             subir:function(){
                 if(this.archivo){
                     this.subiendo=true;
-                    servicios.archivos.store(this.archivo).then((response)=>{
-                        this.subiendo=false;
-                        this.mensaje.estado=3;
-                        this.mensaje.texto=response.data;
-                        this.archivo=null;
-                    }).catch(error=>{
+                    if(((this.archivo.size/1024)/1024)<=this.max){
+                        servicios.archivos.store(this.archivo).then((response)=>{
+                            this.subiendo=false;
+                            this.mensaje.estado=3;
+                            this.mensaje.texto=response.data;
+                            this.archivo=null;
+                        }).catch(error=>{
+                            this.subiendo=false;
+                            this.mensaje.estado=2;
+                            this.mensaje.texto=error;
+                        });
+                    }else{
                         this.subiendo=false;
                         this.mensaje.estado=2;
-                        this.mensaje.texto=error;
-                    });
+                        this.mensaje.texto="Excede "+this.max+" megas";
+                    }
                 }
             }
 
