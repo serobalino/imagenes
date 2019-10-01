@@ -38,7 +38,7 @@ class Image extends Model
 
     public function getHaceImAttribute(){
         //$MongoDt = new MongoDate($this->attributes['created_at'], ($this->attributes['created_at'])->format('Y-m-d H:i:s'));
-        return Date::createFromFormat('Y-m-d H:i:s',$this->attributes['created_at'])->diffForHumans();
+        return $this->attributes['created_at']->diffForHumans();
         //return Date::createFromTimestamp($this->attributes['created_at'])->diffForHumans();
     }
 
