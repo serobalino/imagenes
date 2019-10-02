@@ -5,7 +5,6 @@ import { Button, Block, Text, Input, theme } from 'galio-framework';
 import { Icon, Product } from '../components/';
 
 const { width } = Dimensions.get('screen');
-import products from '../constants/products';
 import * as servicios from "../servicios";
 
 export default class Home extends React.Component {
@@ -13,16 +12,22 @@ export default class Home extends React.Component {
     lista:[]
   };
   componentDidMount() {
-    this.consultar();
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('didFocus', () => {
+      this.consultar();
+    });
+  }
+  componentWillUnmount() {
+    this.focusListener.remove();
   }
   error(){
     servicios.login.limpiar();
     this.props.navigation.navigate('Onboarding');
   }
   consultar() {
+
     AsyncStorage.getItem('token').then(token=>{
       servicios.imagenes.misFotos(token).then(response=>{
-        console.log(response.data);
         this.setState({lista:response.data})
       }).catch(()=>{
         this.error();
@@ -32,15 +37,13 @@ export default class Home extends React.Component {
     });
   }
   renderProducts = () => {
-    const renderLista = this.state.lista.map(item => <Product product={item} key={item._id}/>);
+    const renderLista = this.state.lista.map(item => <Block flex row key={item._id}><Product product={item} /></Block>);
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.products}>
         <Block flex>
-          <Block flex row>
             {renderLista}
-          </Block>
         </Block>
       </ScrollView>
     )

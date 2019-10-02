@@ -1,10 +1,12 @@
 import React from "react";
-import {StyleSheet} from "react-native";
-import {Block, Text} from "galio-framework";
+import {AsyncStorage, StyleSheet} from "react-native";
+import {Text} from "galio-framework";
 import { View, TouchableOpacity } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import {Icon} from "../components";
+import * as servicios from "../servicios";
+import {WSnackBar} from 'react-native-smart-tip';
 
 export default class Home extends React.Component {
     state = {
@@ -15,13 +17,45 @@ export default class Home extends React.Component {
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({ hasCameraPermission: status === 'granted' });
     }
+    makeid(length) {
+        let result           = '';
+        let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+        for ( let i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
     snap = async () => {
         if (this.camera) {
-            const options = { quality: 0.2, base64: false, fixOrientation: true, exif: true};
+            const options = { quality: 0.2, base64: true, fixOrientation: true, exif: true,skipProcessing:false};
             let photo = await this.camera.takePictureAsync(options);
-            console.log(photo)
+            const file = {
+                uri: photo.uri,
+                name: this.makeid(10)+".jpg",
+                type: "image/jpeg"
+            };
+            this.enviar(file);
         }
     };
+    enviar(foto){
+        if(foto){
+            AsyncStorage.getItem('token').then(token=>{
+                WSnackBar.show({data: "Procesando"});
+                servicios.imagenes.nueva(token,foto).then((response)=>{
+                    WSnackBar.show({data: response.data.message});
+                }).catch(()=>{
+                    this.error();
+                });
+            }).catch(()=>{
+                this.error();
+            });
+        }
+    }
+    error(){
+        servicios.login.limpiar();
+        this.props.navigation.navigate('Onboarding');
+    }
 
 
     render() {

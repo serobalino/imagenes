@@ -56,7 +56,7 @@ const ProfileStack = createStackNavigator({
   Profile: {
     screen: ProfileScreen,
     navigationOptions: ({ navigation }) => ({
-      header: <Header white transparent title="Profile" navigation={navigation} />,
+      header: <Header white transparent title="Comentarios" navigation={navigation} />,
       headerTransparent: true,
     })
   },

@@ -1,30 +1,92 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, ImageBackground, Platform } from 'react-native';
-import { Block, Text, theme } from 'galio-framework';
+import {StyleSheet, Dimensions, ScrollView, ImageBackground, Platform, AsyncStorage} from 'react-native';
+import  { Block, Text, theme, Input, Button } from 'galio-framework';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import Icon from '../components/Icon';
 
-import { Images, materialTheme } from '../constants';
+import { materialTheme } from '../constants';
 import { HeaderHeight } from "../constants/utils";
+import * as servicios from "../servicios";
 
 const { width, height } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
 
 export default class Profile extends React.Component {
+
+  state = {
+    lista:[],
+    texto:null,
+  };
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('didFocus', () => {
+      this.consultar();
+    });
+  }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
+  }
+
+  consultar(){
+    const { navigation } = this.props;
+    const elemento  = navigation.dangerouslyGetParent().getParam('product');
+    AsyncStorage.getItem('token').then(token=>{
+      servicios.comentarios.especifico(token,elemento).then(response=>{
+        this.setState({lista:response.data})
+      }).catch(()=>{
+        this.error();
+      });
+    }).catch(()=>{
+      this.error();
+    });
+  }
+  enviar(){
+    const { navigation } = this.props;
+    const elemento  = navigation.dangerouslyGetParent().getParam('product');
+    if(this.state.texto){
+      AsyncStorage.getItem('token').then(token=>{
+        servicios.comentarios.nuevo(token,elemento,this.state.texto).then(()=>{
+          this.setState({texto:null});
+          this.consultar();
+        }).catch(()=>{
+          this.error();
+        });
+      }).catch(()=>{
+        this.error();
+      });
+    }
+  }
+  error(){
+    servicios.login.limpiar();
+    this.props.navigation.navigate('Onboarding');
+  }
+
   render() {
-    const data = [];
+    const { navigation } = this.props;
+    const elemento  = navigation.dangerouslyGetParent().getParam('product');
+
+    const renderLista = this.state.lista.map(item =>
+            <Block row space="between" style={{ flexWrap: 'wrap' }} key={item._id}>
+              <Text size={16}>{item.texto_co}</Text>
+              <Text size={12}>{item.autor.name}</Text>
+            </Block>
+        );
+
     return (
       <Block flex style={styles.profile}>
         <Block flex>
           <ImageBackground
-            source={{uri: Images.Profile}}
+            source={{uri: elemento.ruta_im}}
             style={styles.profileContainer}
             imageStyle={styles.profileImage}>
             <Block flex style={styles.profileDetails}>
               <Block style={styles.profileTexts}>
                 <Block row space="between">
                   <Block row>
-                    <Text color="white" size={16} muted style={styles.seller}>Seller</Text>
+                    <Text color="white" size={16} muted style={styles.seller}>{elemento.nombre_im}</Text>
                   </Block>
                 </Block>
               </Block>
@@ -38,12 +100,22 @@ export default class Profile extends React.Component {
               <Text size={16}>Comentarios</Text>
               <Text size={12} color={materialTheme.COLORS.PRIMARY} onPress={() => this.props.navigation.navigate('Home')}>Regresar</Text>
             </Block>
-            <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
-              <Block row space="between" style={{ flexWrap: 'wrap' }} >
-
-                <Text size={16}>{process.env.PRUEBA}</Text>
-
+            <Block>
+              <Block row >
+                <Input
+                    right
+                    color="black"
+                    style={styles.search}
+                    placeholder="Comentario"
+                    onBlur={() => this.enviar()}
+                    onChangeText={(texto) => this.setState({texto:texto})}
+                    value={this.state.texto}
+                    iconContent={<Icon size={16} color={theme.COLORS.MUTED} name="send" family="MaterialCommunityIcons" />}
+                />
               </Block>
+            </Block>
+            <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
+              {renderLista}
             </Block>
           </ScrollView>
         </Block>
@@ -115,5 +187,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     height: '30%',
     position: 'absolute',
+  },
+  search: {
+    height: 48,
+    width: width - 100,
+    marginHorizontal: 16,
+    borderWidth: 1,
+    borderRadius: 3,
   },
 });

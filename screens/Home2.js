@@ -1,38 +1,60 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
+import {StyleSheet, Dimensions, ScrollView, AsyncStorage} from 'react-native';
 import { Button, Block, Text, Input, theme } from 'galio-framework';
 
 import { Icon, Product } from '../components/';
 
 const { width } = Dimensions.get('screen');
 import products from '../constants/products';
+import * as servicios from "../servicios";
 
 export default class Home extends React.Component {
-
+  state={
+    lista:[]
+  };
   componentDidMount() {
-    console.log("Mundo fotos");
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('didFocus', () => {
+      this.consultar();
+    });
   }
+  componentWillUnmount() {
+    this.focusListener.remove();
+  }
+  error(){
+    servicios.login.limpiar();
+    this.props.navigation.navigate('Onboarding');
+  }
+  consultar() {
 
+    AsyncStorage.getItem('token').then(token=>{
+      servicios.imagenes.mundoFotos(token).then(response=>{
+        this.setState({lista:response.data})
+      }).catch(()=>{
+        this.error();
+      });
+    }).catch(()=>{
+      this.error();
+    });
+  }
   renderProducts = () => {
+    const renderLista = this.state.lista.map(item => <Block flex row key={item._id}><Product product={item} /></Block>);
     return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.products}>
-        <Block flex>
-          <Block flex row>
-            <Product product={products[1]} style={{ marginRight: theme.SIZES.BASE }}/>
-            <Product product={products[2]} style={{ marginRight: theme.SIZES.BASE }}/>
+        <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.products}>
+          <Block flex>
+            {renderLista}
           </Block>
-        </Block>
-      </ScrollView>
+        </ScrollView>
     )
   }
 
   render() {
     return (
-      <Block flex center style={styles.home}>
-        {this.renderProducts()}
-      </Block>
+        <Block flex center style={styles.home}>
+          {this.renderProducts()}
+        </Block>
     );
   }
 }

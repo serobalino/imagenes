@@ -8,18 +8,25 @@ import materialTheme from '../constants/Theme';
 const { width } = Dimensions.get('screen');
 
 class Product extends React.Component {
+  cambiar(){
+    const { product ,navigation} = this.props;
+    navigation.navigate(
+        'Profile',
+        {  product: product},
+    );
+  }
   render() {
     const { navigation, product, horizontal, full, style, priceColor, imageStyle } = this.props;
-    const imageStyles = [ styles.fullImage ];
+    const imageStyles = [styles.image, full ? styles.fullImage : styles.horizontalImage, imageStyle];
 
     return (
       <Block row={horizontal} card flex style={[styles.product, styles.shadow, style]}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Profile', { product: product })}>
+        <TouchableWithoutFeedback onPress={() => this.cambiar()}>
           <Block flex style={[styles.imageContainer, styles.shadow]}>
             <Image source={{ uri: product.ruta_im }} style={imageStyles} />
           </Block>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Profile', { product: product })}>
+        <TouchableWithoutFeedback onPress={() => this.cambiar()}>
           <Block flex space="between" style={styles.productDescription}>
             <Text size={14} style={styles.productTitle}>{product.nombre_im}</Text>
             <Text size={12} muted={!priceColor} color={priceColor}>{product.autor.name}</Text>
