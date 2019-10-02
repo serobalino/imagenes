@@ -18,8 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get("archivo/{id}","ImagesController@generarArchivo")->name("generar");
-Route::get("contenido/{id}","ImagesController@show")->name("contenido");
+Route::get("archivo/{id}","ImagesController@show")->name("generar");
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('/files', 'ImagesController');

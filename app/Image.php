@@ -44,6 +44,6 @@ class Image extends Model
     }
 
     public function getRutaImAttribute(){
-        return route("contenido",$this->getCodeImAttribute());
+        return route("generar",$this->getCodeImAttribute());
     }
 }
