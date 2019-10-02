@@ -34,6 +34,7 @@ export default {
                 usuario=aux.data;
                 valor=true;
             }else{
+                this.limpiar();
                 valor=false;
             }
         }else{
@@ -48,5 +49,8 @@ export default {
         } catch (error) {
             console.log("error en guardar",error);
         }
+    },
+    async limpiar(){
+        await AsyncStorage.clear();
     }
 };

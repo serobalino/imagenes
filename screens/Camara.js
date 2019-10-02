@@ -15,9 +15,17 @@ export default class Home extends React.Component {
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({ hasCameraPermission: status === 'granted' });
     }
+    snap = async () => {
+        if (this.camera) {
+            const options = { quality: 0.2, base64: false, fixOrientation: true, exif: true};
+            let photo = await this.camera.takePictureAsync(options);
+            console.log(photo)
+        }
+    };
 
 
     render() {
+        const { navigation } = this.props;
         const { hasCameraPermission } = this.state;
         if (hasCameraPermission === null) {
             return <View />;
@@ -26,7 +34,7 @@ export default class Home extends React.Component {
         } else {
             return (
                 <View style={styles.vista}>
-                    <Camera style={styles.vista} type={this.state.type}>
+                    <Camera style={styles.vista} type={this.state.type} ref={ref => {this.camera = ref;}}>
                         <View
                             style={styles.completa}>
                             <TouchableOpacity
@@ -40,6 +48,16 @@ export default class Home extends React.Component {
                                     });
                                 }}>
                                 <Icon name="refresh-ccw" family="Feather" size={34} style={styles.icono}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.clickeable}
+                                onPress={() =>this.snap()}>
+                                <Icon name="controller-record" family="Entypo" size={64} style={styles.icono2}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.clickeable}
+                                onPress={() => navigation.navigate('Home')}>
+                                <Icon name="back" family="AntDesign" size={34} style={styles.icono}/>
                             </TouchableOpacity>
                         </View>
                     </Camera>
@@ -68,5 +86,14 @@ const styles = StyleSheet.create({
         marginLeft:10,
         width:40,
         color: 'white'
+    },
+    icono2:{
+        marginBottom: 10,
+        paddingLeft:20,
+        paddingRight:20,
+        marginLeft:20,
+        marginRight:20,
+        width:100,
+        color: 'red'
     }
 });

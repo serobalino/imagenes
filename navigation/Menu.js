@@ -27,12 +27,12 @@ const Drawer = (props) => (
 
 let Storage = {
   getUsuario: async function () {
-    let item = await AsyncStorage.getItem("usuario");
-    item = JSON.parse(item);
-    //return item.name;
+    // let item = await AsyncStorage.getItem("usuario");
+    // item = JSON.parse(item);
+    // //return item.name;
     return {
       avatar:Images.Profile,
-      name:item.name,
+      name:"SN",
       type: 'Seller',
       plan: 'Pro',
       rating: 4.8

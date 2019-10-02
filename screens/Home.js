@@ -1,27 +1,45 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
+import {StyleSheet, Dimensions, ScrollView, AsyncStorage} from 'react-native';
 import { Button, Block, Text, Input, theme } from 'galio-framework';
 
 import { Icon, Product } from '../components/';
 
 const { width } = Dimensions.get('screen');
 import products from '../constants/products';
+import * as servicios from "../servicios";
 
 export default class Home extends React.Component {
-
+  state={
+    lista:[]
+  };
   componentDidMount() {
-    console.log("Mis Fotos");
+    this.consultar();
   }
-
+  error(){
+    servicios.login.limpiar();
+    this.props.navigation.navigate('Onboarding');
+  }
+  consultar() {
+    AsyncStorage.getItem('token').then(token=>{
+      servicios.imagenes.misFotos(token).then(response=>{
+        console.log(response.data);
+        this.setState({lista:response.data})
+      }).catch(()=>{
+        this.error();
+      });
+    }).catch(()=>{
+      this.error();
+    });
+  }
   renderProducts = () => {
+    const renderLista = this.state.lista.map(item => <Product product={item} key={item._id}/>);
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.products}>
         <Block flex>
           <Block flex row>
-            <Product product={products[1]} style={{ marginRight: theme.SIZES.BASE }}/>
-            <Product product={products[2]} style={{ marginRight: theme.SIZES.BASE }}/>
+            {renderLista}
           </Block>
         </Block>
       </ScrollView>

@@ -16,12 +16,16 @@ export default class Onboarding extends React.Component {
   };
 
   iniciarSesion(){
-    servicios.login.iniciarSesion(this.state);
+    servicios.login.iniciarSesion(this.state).then(response=>{
+      if(response)
+        this.props.navigation.navigate('Home');
+    });
   }
   componentDidMount() {
-    if(servicios.login.recuperarUsuario()){
-      this.props.navigation.navigate('Home');
-    }
+    servicios.login.recuperarUsuario().then((valor)=>{
+      if(valor)
+        this.props.navigation.navigate('Home');
+    });
   }
 
 
