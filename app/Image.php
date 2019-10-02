@@ -13,7 +13,7 @@ class Image extends Model
 
     protected $hidden       =   ["archivo_im","id_im","id_us"];
 
-    protected $appends      =   ['hace_im','ruta_im','ruta_im_api','code_im'];
+    protected $appends      =   ['hace_im','ruta_im','code_im'];
 
     protected $with         =   ['autor'];
 
@@ -44,12 +44,6 @@ class Image extends Model
     }
 
     public function getRutaImAttribute(){
-        return route("archivos.show",$this->getCodeImAttribute());
+        return route("contenido",$this->getCodeImAttribute());
     }
-
-    public function getRutaImApiAttribute(){
-        return route("files.show",$this->getCodeImAttribute());
-    }
-
-
 }
