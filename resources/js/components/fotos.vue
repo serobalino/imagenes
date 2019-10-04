@@ -14,7 +14,7 @@
                         </div>
                         <div class="commentText">
                             <p>{{item.texto_co}}</p>
-                            <span class="date sub-text"><b>{{item.autor.name}}</b> {{item.hace_co}}</span>
+                            <span class="date sub-text"><b>{{item.autor.name}}</b> {{item.created_at}}</span>
                         </div>
                     </li>
                 </ul>

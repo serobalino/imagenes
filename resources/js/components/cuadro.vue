@@ -9,7 +9,7 @@
                 frameborder="0"
                 allowfullscreen
         ></object>
-        <span class="texto text-muted">{{objeto.hace_im}}</span>
+        <span class="texto text-muted">{{objeto.created_at}}</span>
     </div>
 
 </template>
