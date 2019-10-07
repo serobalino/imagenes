@@ -65,10 +65,17 @@
                         this.formulario.texto=null;
                     });
                 }
+            },
+            pushNotificaciones:function(){
+                Echo.private(`App.User.1`)
+                    .notification((notification) => {
+                        this.cargarFotos();
+                    });
             }
         },
         mounted(){
             this.cargarFotos();
+            this.pushNotificaciones();
         }
     }
 </script>
