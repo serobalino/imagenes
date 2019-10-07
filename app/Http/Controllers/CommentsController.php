@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\Image as Archivo;
+use App\Notifications\ActualizarLista;
+use App\User;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -58,6 +60,7 @@ class CommentsController extends Controller
             $comentario->id_us      =   auth()->user()->getAuthIdentifier();
             $comentario->texto_co   =   $request->comentario;
             $comentario->save();
+            User::first()->notify(new ActualizarLista());
             return response(['val'=>true,'message'=>"Comentario guardado",'data'=>$validacion->errors()->all()]);
         }
     }

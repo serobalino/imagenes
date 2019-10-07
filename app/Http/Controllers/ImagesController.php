@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Image as Archivo;
+use App\Notifications\ActualizarLista;
+use App\User;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -55,6 +57,7 @@ class ImagesController extends Controller
             $archivo->ext_im        =   $file->getClientOriginalExtension();
             $archivo->nombre_im     =   pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $archivo->save();
+            User::first()->notify(new ActualizarLista());
             unset($file);
             unset($archivo);
             return response(['val'=>true,'message'=>"Se guardó correctamente",'data'=>$validacion->errors()->all()]);
