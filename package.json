@@ -21,6 +21,7 @@
     "expo-font": "^5.0.1",
     "expo-linear-gradient": "^5.0.1",
     "galio-framework": "^0.5.3",
+    "pusher-js": "^5.0.2",
     "react": "16.8.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
     "react-native-comments": "^1.1.6",
